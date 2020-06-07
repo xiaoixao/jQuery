@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>轮播图</title>
+    <script src="js/jquery.js"></script>
+    <style>
+        body {
+            margin: 0;
+        }
+        
+        ul li {
+            list-style: none;
+        }
+        
+        #banner {
+            position: relative;
+            width: 590px;
+            height: 470px;
+            margin: 0 auto;
+        }
+        
+        .im {
+            display: none;
+            width: 590px;
+            height: 470px;
+            position: absolute;
+        }
+        
+        img {
+            width: 590px;
+            height: 470px;
+        }
+        
+        .btn-list {
+            position: absolute;
+            width: 150px;
+            left: 40px;
+            bottom: 20px;
+        }
+        
+        .btn {
+            opacity: 0.5;
+            width: 6px;
+            height: 6px;
+            float: left;
+            border: 1px solid #0cc;
+            border-radius: 5px;
+            margin-right: 8px;
+        }
+        
+        .active {
+            opacity: 1;
+            background-color: white;
+            border-color: white;
+        }
+        
+        .bt {
+            position: absolute;
+            width: 24px;
+            height: 40px;
+            font-size: 20px;
+            line-height: 40px;
+            cursor: pointer;
+            top: 48%;
+            text-align: center;
+            color: white;
+            background-color: rgba(8, 12, 228, 0.5);
+            opacity: 0.4;
+        }
+        
+        .bt:hover {
+            opacity: .5;
+            color: white;
+            background-color: black;
+        }
+        
+        #left {
+            left: 40px;
+        }
+        
+        #right {
+            right: -40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="banner">
+        <ul id="slider">
+            <li class="im" style="display: block;"><img src="image/1.jpg" alt="" /></li>
+            <li class="im"><img src="image/2.jpg" alt="" /></li>
+            <li class="im"><img src="image/3.jpg" alt="" /></li>
+            <li class="im"><img src="image/4.jpg" alt="" /></li>
+            <li class="im"><img src="image/5.jpg" alt="" /></li>
+            <li class="im"><img src="image/6.jpg" alt="" /></li>
+            <li class="im"><img src="image/7.jpg" alt="" /></li>
+            <li class="im"><img src="image/8.jpg" alt="" /></li>
+        </ul>
+
+        <div class="btn-list">
+            <div class="btn active"></div>
+            <div class="btn"></div>
+            <div class="btn"></div>
+            <div class="btn"></div>
+            <div class="btn"></div>
+            <div class="btn"></div>
+            <div class="btn"></div>
+            <div class="btn"></div>
+        </div>
+        <span id="left" class="bt"><</span>
+        <span id="right" class="bt">></span>
+    </div>
+</body>
+<script>
+    $(document).ready(function() {
+        var index = 0;
+        var stop = false;
+        var $li = $("#banner").find("#slider").children(".im");
+        var $page = $("#banner").find(".btn-list").children(".btn");
+        $page.hover(function() {
+            index = $(this).index();
+            $(this).addClass("active").stop(true, true).siblings().removeClass("active");
+            $li.eq(index).stop(true, true).fadeIn(1000).siblings().fadeOut(1000);
+        });
+        //左边点击按钮
+        $("#left").click(function() {
+            clearInterval(timer);
+            index--;
+            if (index < 0) {
+                index = $li.length - 1;
+            }
+            $li.eq(index).stop(true, true).fadeIn().siblings().fadeOut();
+            $page.eq(index).addClass("active").stop(true, true).siblings().removeClass("active");
+        });
+        //右边点击按钮
+        $("#right").click(function() {
+            clearInterval(timer);
+            index++;
+            if (index > $li.length - 1) {
+                index = 0;
+            }
+            $li.eq(index).stop(true, true).fadeIn().siblings().fadeOut();
+            $page.eq(index).addClass("active").stop(true, true).siblings().removeClass("active");
+        });
+        //自动轮播图片
+        var timer = setInterval(function() {
+            if (stop) return;
+            index++;
+            if (index > $li.length - 1) {
+                index = 0;
+            }
+            $li.eq(index).stop(true, true).fadeIn().siblings().fadeOut();
+            $page.eq(index).addClass("active").stop(true, true).siblings().removeClass("active");
+        }, 3000);
+        //鼠标移入图片内，自动轮播停止
+        $("#banner").mousemove(function() {
+            clearInterval(timer);
+        }).mouseout(function() {
+            timer = setInterval(function() {
+                if (stop) return;
+                index++;
+                if (index > $li.length - 1) {
+                    index = 0;
+                }
+                $li.eq(index).stop(true, true).fadeIn().siblings().fadeOut();
+                $page.eq(index).addClass("active").stop(true, true).siblings().removeClass("active");
+            }, 3000);
+        });
+    });
+</script>
+
+</html>
